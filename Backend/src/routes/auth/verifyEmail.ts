@@ -1,5 +1,5 @@
 import express, { Request, Response } from "express";
-import { verifyToken } from "../../utils/token";
+import { TokenInterface, verifyToken } from "../../utils/token";
 import User, { UserInterface } from "../../models/userModel";
 
 const router = express.Router();
@@ -8,7 +8,7 @@ router.get("/", async (req: Request, res: Response) => {
   const { token } = req.query;
 
   try {
-    const decoded: any = await verifyToken(token as string);
+    const decoded: TokenInterface = await verifyToken(token as string);
 
     const user: UserInterface = await User.findOne({ email: decoded.email });
 

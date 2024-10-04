@@ -9,7 +9,7 @@ router.post("/", async (req: Request, res: Response) => {
   const { token, password } = req.body;
 
   try {
-    const decoded: TokenInterface = await verifyToken(token);
+    const decoded: TokenInterface = await verifyToken(token as string);
     console.log(decoded);
 
     const user = await User.findOne({ email: decoded.email });
@@ -29,10 +29,7 @@ router.post("/", async (req: Request, res: Response) => {
       message: "Password reset successful",
     });
   } catch (err: unknown) {
-    res.status(500).json({
-      message: "Internal server error",
-      error: err,
-    });
+    console.log(err);
   }
 });
 
