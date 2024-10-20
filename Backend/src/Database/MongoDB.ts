@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 import dotenv from "dotenv";
 dotenv.config();
 
-const uri: string = `mongodb+srv://project:${process.env.MONGO_PASSWORD}@coffeeshop.jtr6k.mongodb.net/?retryWrites=true&w=majority&appName=coffeeShop`;
+const uri: string = process.env.MONGO_URI
 
 export default async function run() {
   try {

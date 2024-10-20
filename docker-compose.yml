@@ -1,22 +1,38 @@
-version: '3'
+version: '3.8'
 services:
+  mongodb:
+    image: mongo:5
+    container_name: mongodb
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: coffeeShop5
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+
   backend:
-    build: ./Backend
+    build:
+      context: ./Backend
+      dockerfile: Dockerfile
+    container_name: backend
+    environment:
+      MONGO_URI: mongodb://root:coffeeShop5@mongodb:27017/mydatabase?authSource=admin
+      NODE_ENV: development
     ports:
       - "7000:7000"
     depends_on:
       - mongodb
-    environment:
-      MONGO_URI: mongodb://mongodb:27017/yourdb
 
   frontend:
-    build: ./Frontend
+    build:
+      context: ./Frontend
+      dockerfile: Dockerfile
+    container_name: frontend
     ports:
       - "5173:5173"
+    depends_on:
+      - backend
 
-  mongodb:
-    image: mongo
-    ports:
-      - "27017:27017"
-    volumes:
-      - ./mongo-data:/data/db
+volumes:
+  mongo-data:

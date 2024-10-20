@@ -1,9 +1,9 @@
-// import request from "supertest";
-// import express from "express";
-// import { describe, it, before, after } from "node:test";
-// import assert from "node:assert";
-// import mongoose from "mongoose";
-// import { MongoMemoryServer } from "mongodb-memory-server";
+import request from "supertest";
+import express from "express";
+import { describe, it, before, after } from "node:test";
+import assert from "node:assert";
+import mongoose from "mongoose";
+import { MongoMemoryServer } from "mongodb-memory-server";
 
 import authControllers from "../../src/controllers/authControllers";
 import authValidator from "../../src/validations/authValidator";

@@ -4,7 +4,7 @@ import { describe, it, before, after } from "node:test";
 import assert from "node:assert";
 import mongoose from "mongoose";
 import { MongoMemoryServer } from "mongodb-memory-server";
-import cartController from "../../src/controllers/cartController";
+import userControllers from "../../src/controllers/userControllers";
 import User from "../../src/models/userModel";
 import { generateToken } from "../../src/utils/token";
 import cookieParser from "cookie-parser"; // Add this import
@@ -12,7 +12,7 @@ import cookieParser from "cookie-parser"; // Add this import
 const app = express();
 app.use(cookieParser()); // Add cookie-parser middleware
 app.use(express.json());
-app.use("/test/cart/clear", cartController.clearCart);
+app.use("/test/cart/clear", userControllers.clearCart);
 
 let mongoServer: MongoMemoryServer;
 let token: string;
@@ -35,7 +35,7 @@ before(async () => {
   await user.save();
 
   // Generate token for the mock user
-  token = generateToken(user.email, user.id, user.roles); // Generate JWT token
+  token = generateToken(user.email, user.id, user.roles, false); // Generate JWT token
   cookie = `jwt=${token}`
 });
 
@@ -62,7 +62,7 @@ describe("Clear Cart", () => {
   });
 
   it("should return 400 if user is not found", async () => {
-      const invalidToken = generateToken("invalid@example.com", 999, ["user"]);
+      const invalidToken = generateToken("invalid@example.com", 999, ["user"], false);
       const response = await request(app)
           .post("/test/cart/clear")
           .set("Cookie", [`jwt=${invalidToken}`]);

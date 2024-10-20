@@ -49,7 +49,7 @@ describe("Logout", () => {
     });
     await user.save();
 
-    token = generateToken(user.email, user.id, user.roles);
+    token = generateToken(user.email, user.id, user.roles, false);
     cookie = `jwt=${token}`;
   });
 

@@ -4,7 +4,7 @@ import { describe, it, before, after } from "node:test";
 import assert from "node:assert";
 import mongoose from "mongoose";
 import { MongoMemoryServer } from "mongodb-memory-server";
-import cartController from "../../src/controllers/cartController";
+import userControllers from "../../src/controllers/userControllers";
 import User from "../../src/models/userModel";
 import Product from "../../src/models/productModel";
 import { generateToken } from "../../src/utils/token";
@@ -13,7 +13,7 @@ import cookieParser from "cookie-parser"; // <-- Ensure cookie-parser is importe
 const app = express();
 app.use(express.json());
 app.use(cookieParser()); // <-- Add cookie-parser middleware
-app.use("/test/cart/add", cartController.addToCart);
+app.use("/test/cart/:productId", userControllers.addToCart);
 
 let mongoServer: MongoMemoryServer;
 let token: string;
@@ -48,7 +48,7 @@ before(async () => {
   });
   await product.save();
 
-  token = generateToken(user.email, user.id, user.roles); // Generate JWT token
+  token = generateToken(user.email, user.id, user.roles, false); // Generate JWT token
   cookie = `jwt=${token}`
 });
 
@@ -60,9 +60,8 @@ after(async () => {
 describe("Add to Cart", () => {
   it("should add an item to the cart", async () => {
     const response = await request(app)
-      .post("/test/cart/add")
+      .post("/test/cart/101")
       .set("Cookie", cookie) // <-- Ensure the cookie is set correctly
-      .send({ productId: 101 });
 
     assert.strictEqual(response.statusCode, 200);
     assert.strictEqual(response.body.message, "item added to cart");
@@ -76,9 +75,8 @@ describe("Add to Cart", () => {
 
   it("should return 400 if product is not found", async () => {
     const response = await request(app)
-      .post("/test/cart/add")
-      .set("Cookie", [`jwt=${token}`]) // <-- Ensure the cookie is set correctly
-      .send({ productId: 999 });
+      .post("/test/cart/999")
+      .set("Cookie", [`jwt=${token}`]);
 
     assert.strictEqual(response.statusCode, 400);
     assert.strictEqual(response.body.message, "Product not found");

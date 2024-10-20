@@ -10,7 +10,7 @@ import User from "../../src/models/userModel";
 
 const app = express();
 app.use(express.json());
-app.use("/test/users/email/:email", userControllers.getUserByEmail);
+app.use("/test/users/email/:email", userControllers.getUser);
 
 let mongoServer;
 

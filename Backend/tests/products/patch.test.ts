@@ -55,7 +55,7 @@ describe("patchd", () => {
     await product1.save()
     await product2.save()
       
-    token = generateToken("test@example.com", 1, ["user"]);
+    token = generateToken("test@example.com", 1, ["user"], false);
     cookie = `thisissofake`;
   });
 
