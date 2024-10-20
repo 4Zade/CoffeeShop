@@ -12,7 +12,7 @@ export function addDecimals(num1: mongoose.Types.Decimal128, num2: mongoose.Type
   return toDecimal(sum);
 }
 
-export function removeDecimals(num1: mongoose.Types.Decimal128, num2: mongoose.Types.Decimal128): mongoose.Types.Decimal128 {
+export function subtractDecimals(num1: mongoose.Types.Decimal128, num2: mongoose.Types.Decimal128): mongoose.Types.Decimal128 {
   const a: number = parseFloat(num1.toString()) * 100;
   const b: number = parseFloat(num2.toString()) * 100;
   const sum: number = (a - b) / 100;

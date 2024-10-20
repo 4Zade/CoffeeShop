@@ -75,47 +75,4 @@ describe("Get all products", () => {
     assert.strictEqual(response.statusCode, 200); // Using assert
     assert.strictEqual(response.body.message, "Success"); // Using assert
   });
-
-  // it("should return 401 if email is not registered", async () => {
-  //   const response = await request(app).post("/test/auth/login").send({
-  //     email: "wrong@example.com",
-  //     password: "Password123.",
-  //   });
-  //   assert.strictEqual(response.statusCode, 401);
-  //   assert.strictEqual(
-  //     response.body.message,
-  //     "Invalid credentials: Provided email is not registered",
-  //   );
-  // });
-
-  // it("should return 401 if password is incorrect", async () => {
-  //   const response = await request(app).post("/test/auth/login").send({
-  //     email: "test@example.com",
-  //     password: "wrongpassword",
-  //   });
-  //   assert.strictEqual(response.statusCode, 401);
-  //   assert.strictEqual(
-  //     response.body.message,
-  //     "Invalid credentials: Provided password is incorrect",
-  //   );
-  // });
-
-//   it("should lock user if too many login attempts", async () => {
-//     const maxAttempts = 3;
-
-//     for (let i = 0; i < maxAttempts; i++) {
-//       await request(app).post("/test/auth/login").send({
-//         email: "test@example.com",
-//         password: "wrongpassword",
-//       });
-//     }
-
-//     const response = await request(app).post("/test/auth/login").send({
-//       email: "test@example.com",
-//       password: "wrongpassword",
-//     });
-
-//     assert.strictEqual(response.statusCode, 401);
-//     assert.strictEqual(response.body.message, "Account is locked");
-//   });
  });

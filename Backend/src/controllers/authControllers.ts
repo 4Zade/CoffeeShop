@@ -167,6 +167,7 @@ const authControllers = {
     }
   },
 
+  //^ GET /api/v1/auth/status - Status route (checks if user is logged in)
   status: async (req: Request, res: Response, next: NextFunction) => {
     const token: string = req.cookies.jwt;
 
@@ -181,17 +182,19 @@ const authControllers = {
 
       const decoded: TokenInterface = verifyToken(token);
 
+      const user: UserInterface = await User.findOne({ email: decoded.email });
+
       res.status(200).json({
         message: "Succesfull",
         authorized: true,
-        data: decoded,
+        data: user,
       });
     } catch (err) {
       next(err);
     }
   },
 
-  //^ POST /api/v1/auth/verify-email - Verify Email Route (Verifies user email)
+  //^ POST /api/v1/auth/verify/:token - Verify Email Route (Verifies user email)
   verifyEmail: async (req: Request, res: Response, next: NextFunction) => {
     // Request user data
     const token: string = req.params.token;
@@ -275,7 +278,7 @@ const authControllers = {
     }
   },
 
-  //^ POST /api/v1/auth/request-password-reset - Request Password Reset Route (Sends password reset email)
+  //^ POST /api/v1/auth/password/request-reset - Request Password Reset Route (Sends password reset email)
   requestPasswordReset: async (
     req: Request,
     res: Response,
@@ -306,14 +309,15 @@ const authControllers = {
     }
   },
 
-  //^ POST /api/v1/auth/reset-password - Reset Password Route (Resets user password)
+  //^ POST /api/v1/auth/password/reset - Reset Password Route (Resets user password)
   passwordReset: async (req: Request, res: Response, next: NextFunction) => {
     // Request user data
-    const { token, password, repeat_password }: ResetPasswordInterface = req.body;
+    const token: string = req.params.token;
+    const { password, repeat_password }: ResetPasswordInterface = req.body;
 
     try {
       // Verify token
-      const decoded: TokenInterface = await verifyToken(token);
+      const decoded: TokenInterface = verifyToken(token);
 
       // Find user and check if user exists
       const user: UserInterface = await User.findOne({ email: decoded.email });
@@ -338,7 +342,7 @@ const authControllers = {
     }
   },
 
-  //^ POST /api/v1/auth/change-password - Change Password Route (Changes user password)
+  //^ POST /api/v1/auth/password/change - Change Password Route (Changes user password)
   changePassword: async (req: Request, res: Response, next: NextFunction) => {
     // Request user data
     const token: string = req.cookies.jwt;

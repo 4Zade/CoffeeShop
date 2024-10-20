@@ -47,8 +47,10 @@ const productControllers = {
   },
   // ^ GET /api/v1/products/product - Get product by id (gets product by id)
   getProductById: async (req: Request, res: Response, next: NextFunction) => {
+    const id: number = parseInt(req.params.id);
+
     try {
-      const data: ProductInterface = await Product.findOne({ id: req.body.id });
+      const data: ProductInterface = await Product.findOne({ id });
 
       res.status(201).json({
         message: "Success",
@@ -60,6 +62,7 @@ const productControllers = {
   },
   // ^ PATCH /api/v1/products - Update product by id (updates product by id)
   patchProduct: async (req: Request, res: Response, next: NextFunction) => {
+    const id: number = parseInt(req.params.id);
     const fieldsToUpdate: object = {};
 
     Object.keys(req.body).forEach((key) => {
@@ -70,7 +73,7 @@ const productControllers = {
 
     try {
       const result = await Product.updateOne(
-        { id: req.body.id },
+        { id },
         { $set: fieldsToUpdate },
       );
 
@@ -84,7 +87,7 @@ const productControllers = {
   },
   // ^ DELETE /api/v1/products - Delete product by id (deletes product by id)
   deleteProduct: async (req: Request, res: Response, next: NextFunction) => {
-    const { id }: { id: number } = req.body;
+    const id: number = parseInt(req.params.id);
 
     try {
       const deletedProduct = await Product.findOneAndDelete({ id });
@@ -129,7 +132,9 @@ const productControllers = {
         await product.save();
 
         return res.status(200).json({
+          favorited: false,
           message: "Product unfavorited.",
+          favoriteStatus: false
         });
       }
 
@@ -140,7 +145,9 @@ const productControllers = {
       await product.save();
 
       res.status(200).json({
+        favorited: true,
         message: "Product favorited.",
+        favoriteStatus: true
       });
     } catch (err: unknown) {
       next(err);

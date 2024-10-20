@@ -85,7 +85,7 @@ export default function UserDropdown({ open, toggle, roles }: UserDropdownProps)
                 animate={{ scaleY: 1, opacity: 1 }}
                 exit={{ scaleY: 0, opacity: 0 }}
                 transition={{ duration: 0.3 }}
-                className={`w-min text-base px-2 py-2 rounded-lg dark:bg-zinc-800 select-none origin-top dark:text-white bg-slate-200 text-black whitespace-nowrap flex flex-col gap-1 text-center transition-colors absolute top-14 right-2`}
+                className={`z-50 w-min text-base px-2 py-2 rounded-lg dark:bg-zinc-800 select-none origin-top dark:text-white bg-slate-200 text-black whitespace-nowrap flex flex-col gap-1 text-center transition-colors absolute top-14 right-2`}
             >
                 {dropdownItems.map((item, index) => (
                     item.divider ? <hr key={index} className="dark:bg-slate-300 bg-zinc-500 h-px border-0 rounded-full"/> : (

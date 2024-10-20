@@ -2,8 +2,17 @@ import { NextFunction, Request, Response } from "express";
 import User, { UserInterface } from "../models/userModel";
 import Product, { ProductInterface } from "../models/productModel";
 import { TokenInterface, verifyToken } from "../utils/token";
-import toDecimal, { addDecimals, removeDecimals } from "../utils/toDecimal";
+import toDecimal, { addDecimals, divideDecimals, multiplyDecimals, subtractDecimals } from "../utils/toDecimal";
 import { sendContactEmail } from "../utils/email";
+import mongoose from "mongoose";
+import Discount, { DiscountInterface } from "../models/discountModel";
+
+interface CartTotalInterface {
+  total: mongoose.Types.Decimal128;
+  subtotal: mongoose.Types.Decimal128;
+  discount: mongoose.Types.Decimal128;
+  percentage: number;
+}
 
 const userControllers = {
   getUsers: async (_req: Request, res: Response, next: NextFunction) => {
@@ -191,6 +200,11 @@ const userControllers = {
           total: product.price,
         });
       }
+
+      if(!user.cart.total) {
+        user.cart.total = toDecimal(0);
+      }
+
       user.cart.total = addDecimals(user.cart.total, product.price);
 
       await user.save();
@@ -236,11 +250,11 @@ const userControllers = {
 
       if (existingItem.quantity > 1) {
         existingItem.quantity--;
-        existingItem.total = removeDecimals(existingItem.total, product.price);
+        existingItem.total = subtractDecimals(existingItem.total, product.price);
       }
 
       user.cart.items.filter((item) => item.productId !== productId);
-      user.cart.total = removeDecimals(user.cart.total, product.price);
+      user.cart.total = subtractDecimals(user.cart.total, product.price);
 
       await user.save();
 
@@ -280,6 +294,56 @@ const userControllers = {
       next(err);
     }
   },
+
+  cartTotal: async (req: Request, res: Response, next: NextFunction) => {
+    const token: string = req.cookies.jwt;
+
+    try {
+      let data: CartTotalInterface = {
+        total: toDecimal(0),
+        subtotal: toDecimal(0),
+        discount: toDecimal(0),
+        percentage: 0,
+      };
+
+      const decoded: TokenInterface = await verifyToken(token);
+
+      const user: UserInterface = await User.findOne({
+        id: decoded.id,
+      });
+
+      if (!user) {
+        return res.status(400).json({
+          message: "User not found",
+        });
+      }
+
+      data.subtotal = user.cart.total;
+
+      const discountCode: DiscountInterface = await Discount.findOne({ code: user.cart.code });
+
+      if (!discountCode) {
+        discountCode.percentage = 0;
+      }
+
+      if (discountCode.percentage > 0) {
+        const num = divideDecimals(toDecimal(discountCode.percentage), toDecimal(100));
+        const discount = multiplyDecimals(data.subtotal, num);
+        data.discount = discount;
+        data.percentage = discountCode.percentage;
+        data.total = subtractDecimals(data.subtotal, discount);
+      }
+
+      res.status(200).json({
+        message: "Succsefull",
+        data: data
+      });
+    }
+    catch (err) {
+      next(err);
+    }
+  },
+
   contact: async (req: Request, res: Response, next: NextFunction) => {
     const token: string = req.cookies.jwt;
     const { subject, message } = req.body;
@@ -305,6 +369,25 @@ const userControllers = {
 
       res.status(200).json({
         message: "Succesfull",
+      });
+    } catch (err: unknown) {
+      next(err);
+    }
+  },
+  getAdmins: async (_req: Request, res: Response, next: NextFunction) => {
+    try {
+      const users: UserInterface[] = await User.find({
+        role: "admin",
+      });
+      if(!users) {
+        return res.status(400).json({
+          message: "No admins found",
+        });
+      }
+      res.status(200).json({
+        status: "success",
+        message: "All Admins successfully retrieved",
+        data: users,
       });
     } catch (err: unknown) {
       next(err);

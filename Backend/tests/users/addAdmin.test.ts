@@ -4,13 +4,13 @@ import { describe, it, before, after } from "node:test";
 import assert from "node:assert";
 import mongoose from "mongoose";
 import { MongoMemoryServer } from "mongodb-memory-server";
-import adminController from "../../src/controllers/userControllers";
+import userControllers from "../../src/controllers/userControllers";
 
 import User, { UserInterface } from "../../src/models/userModel";
 
 const app = express();
 app.use(express.json());
-app.use("/test/admin", adminController.addAdmin);
+app.use("/test/admin/:identifier", userControllers.addAdmin);
 
 let mongoServer;
 

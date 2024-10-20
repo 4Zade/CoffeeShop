@@ -23,5 +23,6 @@ export interface CartItemInterface {
 
 export interface CartInterface extends mongoose.Document {
   items: CartItemInterface[];
+  code: string;
   total: mongoose.Types.Decimal128;
 }

@@ -68,6 +68,9 @@ const userSchema = new mongoose.Schema(
       items: {
         type: [cartItemSchema],
       },
+      code: {
+        type: String,
+      },
       total: {
         type: mongoose.Schema.Types.Decimal128,
       },

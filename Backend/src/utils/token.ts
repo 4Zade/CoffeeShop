@@ -3,7 +3,7 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-export function generateToken(email: string, id: number, roles: string[], remember) {
+export function generateToken(email: string, id: number, roles: string[], remember?: boolean) {
   return jwt.sign({ email, id, roles }, process.env.JWT_SECRET, {
     expiresIn: remember ? "30d" : "1h",
   });

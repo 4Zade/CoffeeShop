@@ -1,4 +1,5 @@
 import { createContext, useContext, useEffect, useState, useCallback } from "react";
+import { AuthProvider } from "./AuthContext";
 
 interface ThemeContextProps {
     theme: string;
@@ -28,7 +29,9 @@ const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
 
     return (
         <ThemeContext.Provider value={{ theme, toggleTheme }}>
-            {children}
+            <AuthProvider>
+                {children}
+            </AuthProvider>
         </ThemeContext.Provider>
     );
 };

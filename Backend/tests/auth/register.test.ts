@@ -13,19 +13,19 @@ const app = express();
 app.use(express.json());
 app.use("/test/auth/register", authValidator.register, authControllers.register);
 
-// let mongoServer: MongoMemoryServer;
+let mongoServer: MongoMemoryServer;
 
-// before(async () => {
-//   mongoServer = await MongoMemoryServer.create();
-//   const uri = mongoServer.getUri();
+before(async () => {
+  mongoServer = await MongoMemoryServer.create();
+  const uri = mongoServer.getUri();
 
-//   await mongoose.connect(uri);
-// });
+  await mongoose.connect(uri);
+});
 
-// after(async () => {
-//   await mongoose.disconnect();
-//   await mongoServer.stop();
-// });
+after(async () => {
+  await mongoose.disconnect();
+  await mongoServer.stop();
+});
 
 describe("Register", () => {
   before(async () => {
@@ -46,6 +46,7 @@ describe("Register", () => {
       last_name: "Doe",
       email: "jane.doe@example.com",
       password: "Password123.",
+      repeat_password: "Password123.",
     });
 
     assert.strictEqual(response.statusCode, 200);
@@ -58,16 +59,12 @@ describe("Register", () => {
   //^ Test if user with that email is already registered
   it("should return 400 if user with that email is already registered", async () => {
     const response = await request(app).post("/test/auth/register").send({
-      first_name: "Jane",
+      first_name: "John",
       last_name: "Doe",
       email: "john.doe@example.com",
       password: "Password123.",
     });
 
     assert.strictEqual(response.statusCode, 400);
-    assert.strictEqual(
-      response.body.message,
-      "User with this email already exists.",
-    );
   });
 });

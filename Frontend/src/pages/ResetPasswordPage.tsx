@@ -1,42 +1,52 @@
-import { useState, useEffect } from "react"; // Import useEffect for component lifecycle
+import { useState, useEffect } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 export default function ResetPassword() {
+  const { token: urlToken } = useParams(); // Extract the token from the URL
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [repeatPassword, setRepeatPassword] = useState("");
-  const [token, setToken] = useState("");
+  const [token, setToken] = useState(urlToken || ""); // Initialize token state with URL token
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
-  const [isResetting, setIsResetting] = useState(false);
-  const [hasToken, setHasToken] = useState(false); // State to track if a token exists
-  const [showPassword, setShowPassword] = useState(false); // State for password visibility
+  const [isResetting, setIsResetting] = useState(!!urlToken); // Check if we are resetting password based on token presence
+  const [hasToken, setHasToken] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
 
-  // Check if token exists on component mount
+  // Check if token exists
   useEffect(() => {
-    const storedToken = localStorage.getItem("token"); // Change 'token' to your actual token key
-    setHasToken(!!storedToken); // Set hasToken to true if the token exists
+    const storedToken = localStorage.getItem("token");
+    setHasToken(!!storedToken);
   }, []);
 
-  // Regular expressions for password validation
+  // be sito neismeta missing requirements
   const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
 
-  // Request password reset 
+  // Request password reset
   const handlePasswordResetRequest = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
     setSuccess(null);
 
     try {
-      const response = await axios.post("http://localhost:5000/api/v1/auth/password/request-reset", { email });
+      const response = await axios.post("http://localhost:7000/api/v1/auth/password/request-reset", { email });
       setSuccess("Password reset email has been sent. Please check your inbox.");
       console.log("Password reset email response: ", response.data);
     } catch (err: unknown) {
       console.error("Error response:", err);
-      if (err.response && err.response.status === 401) {
-        setError("Unauthorized request. Please check your request.");
+      if (err.response) {
+        // Handle specific error codes
+        if (err.response.status === 404) {
+          setError("Email not found. Please check the email address and try again.");
+        } else if (err.response.status === 401) {
+          setError("Unauthorized request. Please check your request.");
+        } else if (err.response.status === 429) {
+          setError("Too many requests. Please try again later.");
+        } else {
+          setError("Failed to send password reset email.");
+        }
       } else {
         setError("Failed to send password reset email.");
       }
@@ -62,11 +72,11 @@ export default function ResetPassword() {
     }
 
     try {
-      const response = await axios.post("http://localhost:5000/api/v1/auth/password/reset", {
-        token,
+      const response = await axios.post(`http://localhost:7000/api/v1/auth/password/reset/${token}`, {
         password,
         repeat_password: repeatPassword
       });
+      
       setSuccess("Password reset successful! Redirecting to login...");
       console.log("Password reset response: ", response.data);
       setTimeout(() => {
@@ -74,7 +84,16 @@ export default function ResetPassword() {
       }, 2000);
     } catch (err: unknown) {
       console.error("Error response:", err);
-      setError("Failed to reset password. Please try again.");
+      if (err.response) {
+        if (err.response.status === 429) {
+          // Handle the timeout error (Too Many Requests)  //kazkodel is authControllers negalejau paimti/rasti
+          setError("Too many requests. Please try again later.");
+        } else {
+          setError("Failed to reset password. Please try again.");
+        }
+      } else {
+        setError("Failed to reset password. Please try again.");
+      }
     }
   };
 
@@ -86,12 +105,9 @@ export default function ResetPassword() {
         {error && <div className="text-red-500 mb-4">{error}</div>}
         {success && <div className="text-green-500 mb-4">{success}</div>}
 
-        {/* Check if token exists and conditionally render forms */}
         {!isResetting ? (
           <>
-            {hasToken ? (
-              <div className="text-yellow-500 mb-4">You already have a token. Please reset your password.</div>
-            ) : (
+            {!hasToken ? (
               <form onSubmit={handlePasswordResetRequest}>
                 <div className="mb-4">
                   <label htmlFor="email" className="block text-gray-700">Email</label>
@@ -111,31 +127,11 @@ export default function ResetPassword() {
                 >
                   Send Reset Email
                 </button>
-
-                <button
-                  type="button"
-                  className="mt-2 text-blue-500"
-                  onClick={() => setIsResetting(true)}
-                >
-                  Already have a reset token?
-                </button>
               </form>
-            )}
+            ) : null}
           </>
         ) : (
           <form onSubmit={handlePasswordReset}>
-            <div className="mb-4">
-              <label htmlFor="token" className="block text-gray-700">Reset Token</label>
-              <input
-                type="text"
-                id="token"
-                value={token}
-                onChange={(e) => setToken(e.target.value)}
-                className="mt-1 p-2 border border-gray-300 w-full"
-                required
-              />
-            </div>
-
             <div className="mb-4">
               <label htmlFor="password" className="block text-gray-700">New Password</label>
               <div className="relative">
