@@ -19,7 +19,6 @@ export default function ProductPage() {
   const { id } = useParams();
   const { checkAuth, auth } = useAuth();
   const [product, setProduct] = useState<ProductProps | undefined>(undefined);
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -32,7 +31,7 @@ export default function ProductPage() {
         console.log(err);
       } 
       finally {
-        setLoading(false);
+        // setLoading(false);
       }
     };
     fetchData();

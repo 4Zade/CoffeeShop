@@ -7,7 +7,7 @@ import Navbar from "../components/Navigation/Navbar";
 export default function MainLayout() {
     const { theme } = useTheme();
     const { auth } = useAuth();
-    const [open, setOpen] = useState(false);
+    const [open] = useState(false);
 
     return (
         <div className={`w-screen h-screen ${theme} flex`}>

@@ -1,5 +1,5 @@
-import { createContext, useContext, useState, useCallback } from "react";
-import axios from "axios";
+import { createContext, useContext, useState } from "react";
+// import axios from "axios";
 
 interface CartContextProps {
     total: number
@@ -28,22 +28,22 @@ const defaultContextValue: CartContextProps = {
 export const CartContext = createContext<CartContextProps>(defaultContextValue);
 
 const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-    const [items, setItems] = useState<any[]>([]);
-    const [count, setCount] = useState<number>(0);
-    const [total, setTotal] = useState<number>(0);
-    const [subtotal, setSubtotal] = useState<number>(0);
-    const [discount, setDiscount] = useState<number>(0);
-    const [percentage, setPercentage] = useState<number>(0);
+    // const [items, setItems] = useState<any[]>([]);
+    // const [count, setCount] = useState<number>(0);
+    const [total] = useState<number>(0);
+    const [subtotal] = useState<number>(0);
+    const [discount] = useState<number>(0);
+    const [percentage] = useState<number>(0);
 
-    const getCart = useCallback(async () => {
-        try {
-            const response = await axios.get('http://localhost:7000/api/v1/users/cart/total', { withCredentials: true });
-            setTotal(response.data.data.total);
-        }
-        catch (err) {
-            console.log(err);
-        }
-    }, []);
+    // const getCart = useCallback(async () => {
+    //     try {
+    //         const response = await axios.get('http://localhost:7000/api/v1/users/cart/total', { withCredentials: true });
+    //         setTotal(response.data.data.total);
+    //     }
+    //     catch (err) {
+    //         console.log(err);
+    //     }
+    // }, []);
 
     return (
         <CartContext.Provider value={{ total, subtotal, discount, percentage, }}>

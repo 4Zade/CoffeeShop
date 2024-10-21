@@ -9,7 +9,7 @@
     "lint:fix": "eslint . --fix",
     "format": "prettier --write '**/*.{ts,js,json,md}'",
     "build": "tsc",
-    "start": "node ./dist/server.js"
+    "start": "node dist/server.js"
   },
   "author": "",
   "license": "ISC",

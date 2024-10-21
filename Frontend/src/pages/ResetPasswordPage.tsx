@@ -7,7 +7,7 @@ export default function ResetPassword() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [repeatPassword, setRepeatPassword] = useState("");
-  const [token, setToken] = useState(urlToken || ""); // Initialize token state with URL token
+  const [token] = useState(urlToken || ""); // Initialize token state with URL token
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
   const [isResetting, setIsResetting] = useState(!!urlToken); // Check if we are resetting password based on token presence
@@ -34,7 +34,7 @@ export default function ResetPassword() {
       const response = await axios.post("http://localhost:7000/api/v1/auth/password/request-reset", { email });
       setSuccess("Password reset email has been sent. Please check your inbox.");
       console.log("Password reset email response: ", response.data);
-    } catch (err: unknown) {
+    } catch (err: any) {
       console.error("Error response:", err);
       if (err.response) {
         // Handle specific error codes
@@ -82,7 +82,7 @@ export default function ResetPassword() {
       setTimeout(() => {
         navigate("/login");
       }, 2000);
-    } catch (err: unknown) {
+    } catch (err: any) {
       console.error("Error response:", err);
       if (err.response) {
         if (err.response.status === 429) {
