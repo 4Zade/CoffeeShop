@@ -11,22 +11,19 @@ export default function ContactsPage () {
         const loadPage = async () => {
             try {
                 await checkAuth();
-            }
-            catch (error) {
+            } catch (error) {
                 console.error('Error:', error);
-            }
-            finally {
-                if (user?.email && !user?.roles.includes("user")) {
+            } finally {
+                if (!user) {
+                    navigate("/");
+                } else if (user?.email && !user?.roles.includes("user")) {
                     navigate("/verify");
                 }
             }
-        }
+        };
 
         loadPage();
-    })
+    }, [user, checkAuth, navigate]);
 
-
-    return(
-        <ContactsForm/>
-    )
+    return <ContactsForm />;
 }

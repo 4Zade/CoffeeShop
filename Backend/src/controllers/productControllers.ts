@@ -10,6 +10,8 @@ const productControllers = {
   createProduct: async (req: Request, res: Response, next: NextFunction) => {
     const { name, description, price, image, category, size }: ProductInterface = req.body;
     try {
+      console.log(name, description, price, image, category, size);
+
       const id: number = await generateProductId();
       const newProduct: ProductInterface = new Product({
         id,
@@ -47,12 +49,38 @@ const productControllers = {
       next(err);
     }
   },
-  // ^ GET /api/v1/products/product - Get product by id (gets product by id)
-  getProductById: async (req: Request, res: Response, next: NextFunction) => {
+  // ^ GET /api/v1/products/:category/:id - Get product by id (gets product by id)
+  getProduct: async (req: Request, res: Response, next: NextFunction) => {
     const id: number = parseInt(req.params.id);
+    const category: string = req.params.category;
 
     try {
-      const data: ProductInterface = await Product.findOne({ id });
+      const categoryString = category
+      .split('-')
+      .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(' ');
+
+      const data: ProductInterface = await Product.findOne({ id, category: categoryString });
+
+      res.status(201).json({
+        message: "Success",
+        data,
+      });
+    } catch (err: unknown) {
+      next(err);
+    }
+  },
+  // ^ GET /api/v1/products/:category - Get products by id and category (gets product by id and category)
+  getProductByCategory: async (req: Request, res: Response, next: NextFunction) => {
+    const category: string = req.params.category;
+
+    try {
+      const categoryString = category
+      .split('-')
+      .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(' ');
+
+      const data: ProductInterface[] = await Product.find({ category: categoryString });
 
       res.status(201).json({
         message: "Success",

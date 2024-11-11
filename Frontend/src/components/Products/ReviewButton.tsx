@@ -1,14 +1,14 @@
 import axios from "axios";
 import { useState, useEffect } from "react";
 import { useAuth } from "../../contexts/AuthContext";
-import { Icon } from "@iconify/react/dist/iconify.js";
+import Button from "../Button";
 
 interface ReviewProps {
     liked: number
     productId: number
     extraClass?: string
 }
-export default function ReviewButton({ liked, productId, extraClass }: ReviewProps) {
+export default function ReviewButton({ liked, productId }: ReviewProps) {
     const [clicked, setClicked] = useState(false);
     const [likes, setLikes] = useState(liked);
     const { checkAuth, user } = useAuth();
@@ -55,11 +55,14 @@ export default function ReviewButton({ liked, productId, extraClass }: ReviewPro
       // eslint-disable-next-line react-hooks/exhaustive-deps
       }, []);
 
+      const icon = clicked ? "tabler:star-filled" : "tabler:star";
     return (
-      <div className={`top-4 right-6 flex gap-2 items-center z-10 ${extraClass}`}>
-        <p>{likes}</p>
-        <button className="w-10 h-10 hover:bg-gray-800 hover:bg-opacity-10 transition-[background,opacity] grid place-items-center rounded-full group/review" onClick={postReview}>
-          <Icon icon="tabler:star-filled" className={`w-6 h-6 group-hover/review:scale-125 group-hover/review:text-yellow-100 transition-[transform,color] duration-300 ${clicked ? "text-yellow-400 text-opacity-100" : "text-gray-600 text-opacity-40"}`}/>
+      <div className="w-min h-min">
+        <button 
+          className="w-min h-min" 
+          onClick={postReview}
+        >
+          <Button type="icon" icon={icon} />
         </button>
       </div>
     );

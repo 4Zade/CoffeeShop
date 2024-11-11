@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "test": "node --test --require ts-node/register ./tests/discount/addDiscount.test.ts",
+    "test": "node --test --require ts-node/register ./tests/**/*.test.ts",
     "dev": "nodemon ./src/server.ts",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",

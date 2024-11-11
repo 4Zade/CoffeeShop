@@ -1,6 +1,10 @@
 import { createContext, useContext, useEffect, useState, useCallback } from "react";
 import { AuthProvider } from "./AuthContext";
 import { CartProvider } from "./CartContext";
+import { DiscountProvider } from "./DiscountContext";
+import { AlertProvider } from "./AlertContext";
+import { ProductProvider } from "./ProductContext";
+import { MenuProvider } from "./MenuContext";
 
 interface ThemeContextProps {
     theme: string;
@@ -32,7 +36,15 @@ const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
         <ThemeContext.Provider value={{ theme, toggleTheme }}>
             <AuthProvider>
                 <CartProvider>
-                    {children}
+                    <DiscountProvider>
+                        <AlertProvider>
+                            <ProductProvider>
+                                <MenuProvider>
+                                    {children}
+                                </MenuProvider>
+                            </ProductProvider>
+                        </AlertProvider>
+                    </DiscountProvider>
                 </CartProvider>
             </AuthProvider>
         </ThemeContext.Provider>

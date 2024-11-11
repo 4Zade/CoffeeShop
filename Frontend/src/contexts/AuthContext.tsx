@@ -13,16 +13,28 @@ export interface UserProps {
 
 interface AuthContextProps {
     auth: boolean
-    setAuth?: (status: boolean) => void;
     checkAuth: () => Promise<void>;
     user: UserProps | undefined;
-    setUser?: (user: UserProps) => void;
+
+    open: boolean;
+    toggle: () => void;
+    form: "login" | "register";
+    changeForm: (form: "login" | 'register') => void;
+
+    logout: () => Promise<void>
 }
 
 const defaultContextValue: AuthContextProps = {
     auth: false,
     checkAuth: async () => { },
     user: undefined,
+
+    open: false,
+    toggle: async () => { },
+    form: 'login',
+    changeForm: async () => { },
+
+    logout: async () => { }
 };
 
 export const AuthContext = createContext<AuthContextProps>(defaultContextValue);
@@ -30,6 +42,8 @@ export const AuthContext = createContext<AuthContextProps>(defaultContextValue);
 const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const [auth, setAuth] = useState<boolean>(false);
     const [user, setUser] = useState<UserProps | undefined>(undefined);
+    const [open, setOpen] = useState<boolean>(false);
+    const [form, setForm] = useState<"login" | 'register'>('login');
 
 
     const checkAuth = useCallback(async (): Promise<void> => {
@@ -43,8 +57,37 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         }
     }, []);
 
+    const toggle = async () => {
+        setOpen(!open);
+    }
+
+    const changeForm = async (form: "login" | 'register') => {
+        setForm(form);
+    }
+
+    const logout = async () => {
+        try {
+            await axios.post("http://localhost:7000/api/v1/auth/logout", {}, { withCredentials: true });
+            setAuth(false);
+        }
+        catch (error) {
+            console.error('Error:', error);
+        }
+    }
+
+    const login = async (email: string, password: string, remember: boolean) => {
+        try {
+            await axios.post("http://localhost:7000/api/v1/auth/login", { email, password, remember }, { withCredentials: true });
+            setAuth(true);
+            setUser(undefined);
+        }
+        catch (error) {
+            console.error('Error:', error);
+        }
+    }
+
     return (
-        <AuthContext.Provider value={{ auth, checkAuth, user }}>
+        <AuthContext.Provider value={{ auth, checkAuth, user, open, toggle, form, changeForm, logout }}>
             {children}
         </AuthContext.Provider>
     );

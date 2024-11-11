@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useCart } from "../contexts/CartContext";
 import { useAuth } from "../contexts/AuthContext";
-import CartItem from "../components/Cart/CartItem";
+import CartItem from "../components/Navigation/Cart/CartItem";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";

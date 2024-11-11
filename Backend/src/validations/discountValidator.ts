@@ -21,7 +21,7 @@ export const DISCOUNT_VALIDATOR = [
     .isNumeric()
     .withMessage("DISCOUNT PERCENTAGE MUST BE A NUMBER")
     .custom((value) => {
-      if (value < 0 || value > 100) {
+      if (value < 1 || value > 100) {
         return false;
       }
       return true;

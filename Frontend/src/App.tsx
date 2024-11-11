@@ -9,35 +9,49 @@ import ResetPassword from "./pages/ResetPasswordPage";
 import ContactsPage from "./pages/ContactsPage";
 import EmailVerified from "./pages/EmailVerifiedPage";
 import VerifyEmail from "./pages/VerifyEmailPage";
-import ProductPage from "./pages/ProductPage";
+import ProductPage from "./pages/products/ProductPage";
 import PurchasePage from "./pages/PurchasePage";
 import PageNotFound from "./pages/PageNotFound";
-import ShopPage from "./pages/ShopPage";
-import RegisterPage from "./pages/RegisterPage";
-import LoginPage from "./pages/LoginPage";
-import ConfirmationPage from "./pages/ConfirmationPage";
+import ProductsPage from "./pages/products/ProductsPage";
 
 
 import { ThemeProvider } from "./contexts/ThemeContext";
 import CheckoutPage from "./pages/CheckoutPage";
+import ProtectedLayout from "./layouts/ProtectedLayout";
+import ProductLayout from "./layouts/ProductLayout";
+import UserSettingsPage from "./pages/UserSettingsPage";
+import SettingsLayout from "./layouts/SettingsLayout";
 
+// Loaders
+import productsLoader from "./loaders/products/ProductsLoader";
+import productLoader from "./loaders/products/ProductLoader";
 
 const routes = createBrowserRouter(
     createRoutesFromElements(
         <Route path="/" element={<MainLayout />}>
             <Route index element={<HomePage />} />
-            <Route path="/register" element={<RegisterPage/>} />
-            <Route path="/login" element={<LoginPage />} />
+
+            <Route element={<ProtectedLayout />}>
+                <Route path="/purchase" element={<PurchasePage/>}/>
+                <Route path="/checkout" element={<CheckoutPage/>}/>
+            </Route>
+
+            <Route path="/produktai" element={<ProductLayout />}> {/* Will show additional recomended products */}
+                <Route index element={<ProductsPage />} loader={productsLoader}/>
+                <Route path=":category" element={<ProductsPage />} loader={productsLoader}/>
+                <Route path=":category/:id" element={<ProductPage />} loader={productLoader}/>
+            </Route>
+
             <Route path="/reset-password" element={<ResetPassword />} />
             <Route path="/reset-password/:token" element={<ResetPassword />} />
-            <Route path="/contacts" element={<ContactsPage/>} />
             <Route path="/verify/:token" element={<EmailVerified/>} />
             <Route path="/verify" element={<VerifyEmail/>} />
-            <Route path="/products" element={<ShopPage />} />
-            <Route path="/products/:id" element={<ProductPage />} />
-            <Route path="/purchase" element={<PurchasePage/>}/>
-            <Route path="/checkout" element={<CheckoutPage/>}/>
-            <Route path="/confirmation" element={<ConfirmationPage />} />
+
+            <Route path="/kontaktai" element={<ContactsPage/>} />
+            <Route path="/nustatymai" element={<SettingsLayout />}>
+                <Route index element={<UserSettingsPage />} />
+            </Route>
+
             <Route path="*" element={<PageNotFound />} />
         </Route>
     )

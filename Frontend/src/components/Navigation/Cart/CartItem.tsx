@@ -1,6 +1,6 @@
 // CartItem.tsx
 import { useEffect, useState } from "react";
-import { useCart } from "../../contexts/CartContext";
+import { useCart } from "../../../contexts/CartContext";
 import axios from "axios";
 
 // Define props types

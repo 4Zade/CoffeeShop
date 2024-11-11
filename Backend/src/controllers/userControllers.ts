@@ -33,13 +33,7 @@ const userControllers = {
     let user: UserInterface;
 
     try {
-      if (param.includes("@")) {
         user = await User.findOne({ email: param });
-      }
-      else {
-        user = await User.findOne({ id: param });
-      }
-
       if (!user) {
         return res.status(404).json({
           status: "error",
@@ -88,30 +82,26 @@ const userControllers = {
 
     try {
       let user: UserInterface;
-
-      if (params.includes("@")) {
         user = await User.findOne({ email: params });
-      } else {
-        user = await User.findOne({ id: params });
-      }
+
 
       if (!user) {
         return res.status(404).json({ error: "User not found" });
       }
 
-      if (!user.roles.includes("User")) {
+      if (!user.roles.includes("user")) {
         return res.status(400).json({
           message: "User is not verified",
         });
       }
 
-      if (user.roles.includes("Admin")) {
+      if (user.roles.includes("admin")) {
         return res.status(400).json({
           message: "User is already an admin",
         });
       }
 
-      user.roles.push("Admin");
+      user.roles.push("admin");
       await user.save();
 
       res.status(200).json({
@@ -127,30 +117,26 @@ const userControllers = {
 
     try {
       let user: UserInterface;
-
-      if (params.includes("@")) {
         user = await User.findOne({ email: params });
-      } else {
-        user = await User.findOne({ id: params });
-      }
+
 
       if (!user) {
         return res.status(404).json({ error: "User not found" });
       }
 
-      if (!user.roles.includes("Admin")) {
+      if (!user.roles.includes("admin")) {
         return res.status(400).json({
           message: "User is not an admin",
         });
       }
 
-      if (!user.roles.includes("User")) {
+      if (!user.roles.includes("user")) {
         return res.status(400).json({
           message: "User is not verified",
         });
       }
 
-      user.roles = user.roles.filter((role: string) => role !== "Admin");
+      user.roles = user.roles.filter((role: string) => role !== "admin");
       await user.save();
 
       res.json({
@@ -183,7 +169,7 @@ const userControllers = {
   getAdmins: async (_req: Request, res: Response, next: NextFunction) => {
     try {
       const users: UserInterface[] = await User.find({
-        roles: { $in: ["Admin"] }
+        roles: { $in: ["admin"] }
       });
 
       console.log(typeof users);
@@ -310,9 +296,21 @@ const userControllers = {
         });
       }
 
+      const validDiscounts = await Promise.all(
+        discounts.map(async discount => {
+          if (discount.expires < new Date()) {
+            await Discount.deleteOne({ code: discount.code });
+            return null;
+          }
+          return discount;
+        })
+      );
+  
+      const filteredDiscounts = validDiscounts.filter(discount => discount !== null);
+  
       res.status(200).json({
         message: "All discounts successfully retrieved",
-        discounts: discounts,
+        discounts: filteredDiscounts,
       });
     } catch (err: unknown) {
       next(err);

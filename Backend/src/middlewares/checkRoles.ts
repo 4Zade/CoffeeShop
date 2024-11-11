@@ -11,7 +11,7 @@ export async function isAdmin(req: Request, res: Response, next: NextFunction) {
 
     const decoded: TokenInterface = verifyToken(token);
 
-    if (!decoded.roles.includes("Admin")) {
+    if (!decoded.roles.includes("admin")) {
       return res.status(403).json({
         message: "You are not authorized to perform this action",
       });
