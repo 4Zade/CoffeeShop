@@ -103,7 +103,7 @@ export default function ProductForm({ formType }: { formType: string}) {
             </section>
 
             <section className="w-full flex items-center gap-4">
-                <Button type="width" icon="tabler:x">Atšaukti</Button>
+                <Button type="width" icon="tabler:x" onClick={closeModal}>Atšaukti</Button>
                 <Button type="submit" icon={formType === "add" ? "tabler:plus" : "tabler:edit"}>{formType === "add" ? "Pridėti" : "Redaguoti"}</Button>
             </section>
         </form>
