@@ -27,7 +27,7 @@ export default function Navbar() {
                         <NavLink to="/produktai">Mūsų kava</NavLink>
 
                         <Link to="/" className="transition-transform duration-1000 ease-in-out">
-                            <img src="/logo.webp" alt="" draggable="false"/>
+                            <img src="/logo.webp" alt="Company logo" draggable="false"/>
                         </Link>
 
                         <NavLink to="/kontaktai">Kontaktai</NavLink>
