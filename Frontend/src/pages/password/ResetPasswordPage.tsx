@@ -30,7 +30,7 @@ export default function ResetPasswordPage() {
     setEmail("");
 
     try {
-      const response = await axios.post("http://localhost:7000/api/v1/auth/password/request-reset", { email });
+      const response = await axios.post("/api/v1/auth/password/request-reset", { email });
       setSuccess("Password reset email has been sent. Please check your inbox.");
       console.log("Password reset email response: ", response.data);
     } catch (err: any) {
@@ -66,7 +66,7 @@ export default function ResetPasswordPage() {
     }
 
     try {
-      const response = await axios.post(`http://localhost:7000/api/v1/auth/password/reset/${token}`, {
+      const response = await axios.post(`/api/v1/auth/password/reset/${token}`, {
         password,
         repeat_password: repeatPassword
       });

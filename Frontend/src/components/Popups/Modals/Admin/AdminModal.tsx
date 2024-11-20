@@ -10,7 +10,7 @@ export default function AdminModal() {
 
     const getAdmins = async () => {
         try {
-            const response = await axios.get("http://localhost:7000/api/v1/users/admins", { withCredentials: true });
+            const response = await axios.get("/api/v1/users/admins", { withCredentials: true });
             setAdmins(response.data.data);
         } 
         catch (error) {
@@ -20,7 +20,7 @@ export default function AdminModal() {
 
     const addAdmin = async (email: string) => {
         try {
-            await axios.post(`http://localhost:7000/api/v1/users/admins/${email}`, {}, { withCredentials: true });
+            await axios.post(`/api/v1/users/admins/${email}`, {}, { withCredentials: true });
             await getAdmins();
         }
         catch (err) {
@@ -30,7 +30,7 @@ export default function AdminModal() {
 
     const removeAdmin = async (email: string) => {
         try {
-            await axios.delete(`http://localhost:7000/api/v1/users/admins/${email}`, { withCredentials: true });
+            await axios.delete(`/api/v1/users/admins/${email}`, { withCredentials: true });
             await getAdmins();
         }
         catch (err) {

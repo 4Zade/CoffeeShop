@@ -11,7 +11,7 @@ export default function AddToCart({productId}: {productId: number}) {
         try {
             event.preventDefault();
             event.stopPropagation();
-            await axios.post(`http://localhost:7000/api/v1/users/cart/${productId}`, {}, {withCredentials: true});
+            await axios.post(`/api/v1/users/cart/${productId}`, {}, {withCredentials: true});
             await getCart();
             successAlert("Produktas sėkmingai pridėtas į krepšelį");
         } catch (err) {

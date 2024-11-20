@@ -15,7 +15,7 @@ export default function TransactionItem({ id, quantity }: { id: number, quantity
     useEffect(() => {
         const loadProduct = async () => {
             try {
-                const response = await axios.get(`http://localhost:7000/api/v1/products/id/${id}`);
+                const response = await axios.get(`/api/v1/products/id/${id}`);
                 setProduct(response.data.data);
             } catch (err) {
                 console.log("Error loading product:", err);

@@ -61,7 +61,7 @@ async function startServer() {
     app.use(cookieParser());
     app.use(
       cors({
-        origin: "http://localhost:5173",
+        origin: 'http://cafe.zade.lt/',
         credentials: true,
       })
     );

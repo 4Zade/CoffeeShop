@@ -25,7 +25,7 @@ export default function ProductPage() {
 
   const deleteProduct = async (id: number | string) => {
     try {
-      await axios.delete(`http://localhost:7000/api/v1/products/${id}`, { withCredentials: true });
+      await axios.delete(`/api/v1/products/${id}`, { withCredentials: true });
       successAlert("Produktas sėkmingai ištrintas");
       navigate("/produktai");
     } catch (err) {

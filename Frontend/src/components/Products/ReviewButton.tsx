@@ -18,7 +18,7 @@ export default function ReviewButton({ liked, productId }: ReviewProps) {
           event.preventDefault();
           event.stopPropagation();
 
-          const response = await axios.post("http://localhost:7000/api/v1/products/review", { productId } ,{ withCredentials: true });
+          const response = await axios.post("/api/v1/products/review", { productId } ,{ withCredentials: true });
 
           if (response.data.favorited) {
             setLikes(likes + 1);

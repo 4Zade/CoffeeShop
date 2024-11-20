@@ -28,7 +28,7 @@ export default function CartMain() {
 
     const onSubmit = async (data: { code: string }) => {
         try {
-            await axios.get(`http://localhost:7000/api/v1/users/discounts/${data.code}`, { withCredentials: true });
+            await axios.get(`/api/v1/users/discounts/${data.code}`, { withCredentials: true });
             await getCart();
         }
         catch (err) {

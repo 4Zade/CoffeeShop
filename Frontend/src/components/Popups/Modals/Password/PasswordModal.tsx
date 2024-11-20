@@ -14,7 +14,7 @@ export default function PasswordModal() {
 
     const onSubmit = async (data: { password: string }) => {
         try {
-            await axios.delete('http://localhost:7000/api/v1/auth/delete', { data, withCredentials: true });
+            await axios.delete('/api/v1/auth/delete', { data, withCredentials: true });
             successAlert("Paskyra sėkmingai ištrinta");
             logout();
             closeModal();

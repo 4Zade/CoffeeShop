@@ -24,7 +24,7 @@ export default function CartItem({ productId, quantity, pricePerItem }: CartItem
     useEffect(() => {
         const loadProduct = async () => {
             try {
-                const response = await axios.get(`http://localhost:7000/api/v1/products/${productId}`);
+                const response = await axios.get(`/api/v1/products/${productId}`);
                 setProduct(response.data.data);
             } catch (err) {
                 console.log("Error loading product:", err);

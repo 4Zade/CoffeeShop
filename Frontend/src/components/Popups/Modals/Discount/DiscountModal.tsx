@@ -27,7 +27,7 @@ export default function DiscountModal() {
 
     const deleteCode = useCallback(async (code: string) => {
         try {
-            await axios.delete(`http://localhost:7000/api/v1/users/discounts/${code}`, { withCredentials: true });
+            await axios.delete(`/api/v1/users/discounts/${code}`, { withCredentials: true });
             setAction('');
             refreshCodes(); // Refresh codes after deleting
         } catch (err) {
@@ -37,7 +37,7 @@ export default function DiscountModal() {
 
     const editDiscount = useCallback(async (code: string, updatedCode: DiscountProps) => {
         try {
-            await axios.patch(`http://localhost:7000/api/v1/users/discounts/${code}`, updatedCode, { withCredentials: true });
+            await axios.patch(`/api/v1/users/discounts/${code}`, updatedCode, { withCredentials: true });
             setAction('');
             refreshCodes(); // Refresh codes after editing
         } catch (err) {
@@ -47,7 +47,7 @@ export default function DiscountModal() {
 
     const addDiscount = useCallback(async (newCode: DiscountProps) => {
         try {
-            await axios.post("http://localhost:7000/api/v1/users/discounts", newCode, { withCredentials: true });
+            await axios.post("/api/v1/users/discounts", newCode, { withCredentials: true });
             setAction('');
             refreshCodes(); // Refresh codes after adding
         } catch (err) {
@@ -57,7 +57,7 @@ export default function DiscountModal() {
 
     const refreshCodes = useCallback(async () => {
         try {
-            const res = await axios.get("http://localhost:7000/api/v1/users/discounts", { withCredentials: true });
+            const res = await axios.get("/api/v1/users/discounts", { withCredentials: true });
             setCodes(res.data.discounts);
         } catch (err) {
             console.log(err);

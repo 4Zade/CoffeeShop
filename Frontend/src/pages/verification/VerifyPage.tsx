@@ -30,7 +30,7 @@ useEffect(() => {
 
     try {
       console.log(user?.email)
-      await axios.post('http://localhost:7000/api/v1/auth/resend-verify', { email: user?.email }, { withCredentials: true });
+      await axios.post('/api/v1/auth/resend-verify', { email: user?.email }, { withCredentials: true });
     } catch (error) {
       console.error('Error resending verification email:', error);
     }

@@ -48,7 +48,7 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
     const checkAuth = useCallback(async (): Promise<void> => {
         try {
-            const response = await axios.get('http://localhost:7000/api/v1/auth/status', { withCredentials: true });
+            const response = await axios.get('/api/v1/auth/status', { withCredentials: true });
             setAuth(response.data.authorized);
             setUser(response.data.data);
         }
@@ -69,7 +69,7 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
     const logout = async () => {
         try {
-            await axios.post("http://localhost:7000/api/v1/auth/logout", {}, { withCredentials: true });
+            await axios.post("/api/v1/auth/logout", {}, { withCredentials: true });
             setAuth(false);
             setUser(undefined);
             window.location.href = "/";

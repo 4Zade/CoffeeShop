@@ -18,7 +18,7 @@ export default function CartItem({ id, quantity }: { id: number, quantity: numbe
     useEffect(() => {
         const loadProduct = async () => {
             try {
-                const response = await axios.get(`http://localhost:7000/api/v1/products/id/${id}`);
+                const response = await axios.get(`/api/v1/products/id/${id}`);
                 setProduct(response.data.data);
             } catch (err) {
                 console.log("Error loading product:", err);
@@ -30,7 +30,7 @@ export default function CartItem({ id, quantity }: { id: number, quantity: numbe
 
     const deleteItemFromCart = async () => {
         try {
-            await axios.delete(`http://localhost:7000/api/v1/users/cart/${id}`, { data: { purge: true }, withCredentials: true });
+            await axios.delete(`/api/v1/users/cart/${id}`, { data: { purge: true }, withCredentials: true });
             await getCart();
         } catch (err) {
             console.log(err);
@@ -40,10 +40,10 @@ export default function CartItem({ id, quantity }: { id: number, quantity: numbe
     const quantityChange = async (action: "add" | "remove") => {
         try {
            if (action === "add") {
-               await axios.post(`http://localhost:7000/api/v1/users/cart/${id}`, {}, { withCredentials: true });
+               await axios.post(`api/v1/users/cart/${id}`, {}, { withCredentials: true });
            }
            else if (action === "remove") {
-               await axios.delete(`http://localhost:7000/api/v1/users/cart/${id}`, { withCredentials: true });
+               await axios.delete(`/api/v1/users/cart/${id}`, { withCredentials: true });
            }
             await getCart();
         } catch (err) {

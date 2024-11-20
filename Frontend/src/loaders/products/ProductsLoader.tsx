@@ -8,11 +8,11 @@ export default async function productsLoader({ params }: LoaderFunctionArgs) {
         let response;
         
         if (category) {
-            response = await axios.get(`http://localhost:7000/api/v1/products/${category}`, { withCredentials: true });
+            response = await axios.get(`/api/v1/products/${category}`, { withCredentials: true });
             return response.data.data; 
         }
 
-        response = await axios.get("http://localhost:7000/api/v1/products", { withCredentials: true });
+        response = await axios.get("/api/v1/products", { withCredentials: true });
         return response.data.data;
     }
     catch (error) {

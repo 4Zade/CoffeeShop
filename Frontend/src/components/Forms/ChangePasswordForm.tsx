@@ -10,7 +10,7 @@ export default function ChangePasswordForm() {
 
     const onSubmit = async (data: { first_name: string; last_name: string; }) => {
         try {
-            await axios.patch(`http://localhost:7000/api/v1/auth/password/change`, data, { withCredentials: true });
+            await axios.patch(`/api/v1/auth/password/change`, data, { withCredentials: true });
             successAlert("Slaptažodis sėkmingai pakeistas!");
             return
         }

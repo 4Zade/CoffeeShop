@@ -12,7 +12,7 @@ export default function ContactsForm () {
 
     async function getEmail() {
         try {
-          const response = await axios.get('http://localhost:7000/api/v1/auth/status', { withCredentials: true });
+          const response = await axios.get('/api/v1/auth/status', { withCredentials: true });
 
             if(response.data.authorized){
               setEmail(response.data.data.email);
@@ -29,7 +29,7 @@ export default function ContactsForm () {
 
     const onSubmit = async (data: { email: string; subject: string; message: string; }) => {
         try {
-            await axios.post('http://localhost:7000/api/v1/users/contacts', data, { withCredentials: true });
+            await axios.post('/api/v1/users/contacts', data, { withCredentials: true });
             
             successAlert('Žinutė sėkmingai išsiūsta!')
             setValue('email', '');

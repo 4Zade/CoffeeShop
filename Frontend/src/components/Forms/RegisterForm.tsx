@@ -25,7 +25,7 @@ export default function RegisterForm() {
 
     const onSubmit: SubmitHandler<FormInputs> = async (data: FormInputs) => {
         try {
-            await axios.post('http://localhost:7000/api/v1/auth/register', data, { withCredentials: true });
+            await axios.post('/api/v1/auth/register', data, { withCredentials: true });
             successAlert('Paskyra sėkmingai sukurta!')
             toggle();
             checkAuth();

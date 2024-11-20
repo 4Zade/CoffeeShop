@@ -9,7 +9,7 @@ export default function VerifiedPage() {
 
     async function getEmail() {
         try {
-            const response = await axios.post(`http://localhost:7000/api/v1/auth/verify/${token}`, { withCredentials: true });
+            const response = await axios.post(`/api/v1/auth/verify/${token}`, { withCredentials: true });
 
             if(response.status === 200){
                 setVerify(true);

@@ -54,7 +54,7 @@ export default function ProductForm({ formType }: { formType: string}) {
 
     const fetchProduct = async () => {
         try {
-            const response = await axios.get(`http://localhost:7000/api/v1/products/id/${product.id}`, { withCredentials: true });
+            const response = await axios.get(`/api/v1/products/id/${product.id}`, { withCredentials: true });
             setProductData({
                 name: response.data.data.name,
                 description: response.data.data.description,
@@ -92,7 +92,7 @@ export default function ProductForm({ formType }: { formType: string}) {
 
         try {
             if (formType === 'add') {
-                await axios.post("http://localhost:7000/api/v1/products", formData, { withCredentials: true });
+                await axios.post("/api/v1/products", formData, { withCredentials: true });
                 refreshProducts({ category: locationEnd });
                 closeModal();
                 successAlert("Pavadinimas pridėtas");
@@ -100,7 +100,7 @@ export default function ProductForm({ formType }: { formType: string}) {
             }
 
             if (formType === 'edit') {
-                await axios.patch(`http://localhost:7000/api/v1/products/${product.id}`, formData, { withCredentials: true });
+                await axios.patch(`/api/v1/products/${product.id}`, formData, { withCredentials: true });
                 closeModal();
                 successAlert("Pavadinimas redaguotas");
                 navigate('/produktai');

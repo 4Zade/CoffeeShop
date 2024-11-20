@@ -15,7 +15,7 @@ export default function LoginForm() {
 
     const onSubmit = async (data: { email: string; password: string; remember: boolean; }) => {
         try {
-            await axios.post('http://localhost:7000/api/v1/auth/login', data, { withCredentials: true });
+            await axios.post('/api/v1/auth/login', data, { withCredentials: true });
             successAlert('Sėkmingai prisijungėte!')
             await checkAuth();
             toggle();

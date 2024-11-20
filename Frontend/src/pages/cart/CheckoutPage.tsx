@@ -34,7 +34,7 @@ export default function CheckoutPage() {
                 return;
             }
 
-            await axios.post(`http://localhost:7000/api/v1/purchase`, data, { withCredentials: true });
+            await axios.post(`/api/v1/purchase`, data, { withCredentials: true });
             successAlert("Pirkimas įvykdytas");
             return navigate("/");
         }

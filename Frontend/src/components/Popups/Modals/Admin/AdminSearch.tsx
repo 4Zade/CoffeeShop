@@ -12,7 +12,7 @@ export default function AdminSearch({ addAdmin }: { addAdmin: (email: string) =>
     useEffect(() => {
         const getUsers = async () => {
             try {
-                const response = await axios.get("http://localhost:7000/api/v1/users", { withCredentials: true });
+                const response = await axios.get("/api/v1/users", { withCredentials: true });
                 setUsers(response.data.data);
             }
             catch (err) {

@@ -30,7 +30,7 @@ const ProductProvider = ({ children }: { children: React.ReactNode }) => {
             let response;
 
             if (category) {
-                response = await axios.get(`http://localhost:7000/api/v1/products/${category}`, { withCredentials: true });
+                response = await axios.get(`/api/v1/products/${category}`, { withCredentials: true });
                 
                 if (response.data) {
                     setProducts(response.data.data);
@@ -38,7 +38,7 @@ const ProductProvider = ({ children }: { children: React.ReactNode }) => {
                 }
             }
 
-            response = await axios.get(`http://localhost:7000/api/v1/products/`, { withCredentials: true });
+            response = await axios.get(`/api/v1/products/`, { withCredentials: true });
             
             if (response.data) {
                 setProducts(response.data.data);

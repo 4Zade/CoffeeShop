@@ -23,7 +23,7 @@ export default function UserForm() {
     const onSubmit = async (data: { first_name: string; last_name: string; }) => {
         try {
             if (data.first_name !== user?.first_name || data.last_name !== user?.last_name) {
-                await axios.patch(`http://localhost:7000/api/v1/users`, data, { withCredentials: true });
+                await axios.patch(`/api/v1/users`, data, { withCredentials: true });
                 successAlert("Paskyra sėkmingai atnaujinta!");
                 return;
             }
